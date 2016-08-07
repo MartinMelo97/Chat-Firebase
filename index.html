@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Chat con FireBase</title>
+	<link rel="stylesheet" type="text/css" href="estilos.css">
+	<!-- Compiled and minified CSS -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  	<!--Import Google Icon Font-->
+     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     <!--Import materialize.css-->
+     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+     <!--Let browser know website is optimized for mobile-->
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+	<header>
+		<nav>
+		    <div class="nav-wrapper">
+		      <a href="#" class="brand-logo">Logo</a>
+		      <ul id="nav-mobile" class="right hide-on-med-and-down">
+		        <li><a href="sass.html">Sass</a></li>
+		        <li><a href="badges.html">Components</a></li>
+		        <li><a href="collapsible.html">JavaScript</a></li>
+		      </ul>
+		    </div>
+	  	</nav>
+	</header>
+	<section>
+		<article>
+			<h1 class="center">Chat hecho con Firebase!</h1>
+			<div class="container">
+				<div class="row">
+					<div class="col s5">
+						<img src="" id="ImagenUser">
+					</div>
+					<div class="col s7">
+						<h4 id="Wecolme"></h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s8">
+						<div class="chat">
+							<!--<h3>Aquí ira el chat</h3>-->
+						</div>
+					</div>
+					<div class="col s4">
+						<div class="control-login">
+							<!--<h4>Aquí irán los botones de login y logout</h4>-->
+							<a href="" id="login" class="btn">Login</a>
+							<br><br><br>
+							<a href="" id="logout" class="btn">Logout</a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s8">
+						<div class="ingreso">
+							<input type="text" id="mensaje" name="mensaje" placeholder="Ingresa un mensaje">
+							<a href="" class="btn" id="enviar">Enviar mensaje</a>
+						</div>							
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</section>
+	<footer>
+		
+	</footer>
+
+
+
+<!-- Compiled and minified JavaScript -->
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+  	<!--Import jQuery before materialize.js-->
+    <!--<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>-->
+    <script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+
+	<!--Importamos el código necesario para utilizar Firebase-->
+	<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+	
+	<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyC2vVZzloP1egyA2nf4GJJ8H-u3ihFbJk0",
+	    authDomain: "segundaprueba-3db79.firebaseapp.com",
+	    databaseURL: "https://segundaprueba-3db79.firebaseio.com",
+	    storageBucket: "",
+	  };
+	  firebase.initializeApp(config);
+	</script>
+    
+
+    <script>
+	    //Instanciamos un objeto para poder utilizar la base de Datos
+	  	var database = firebase.database();
+	  	var chat = database.ref('chat'); //Definimos esta variable para podes acceder a la base de datos
+	    $('#enviar').on('click', function() { //Aquí guardaremos los mensajes enviados en la base de datos
+	    	chat.push({
+		    username: 'Martin',
+		    edad: 19,
+		    //email: 'nitram-210397@hotmail.com',
+		    mensaje: $('#mensaje').val()
+		   // profile_picture : imageUrl
+	  		});
+	    });
+
+	    //Aquí traeremos los mensajes existentes en la base de datos y los pondremos en el chat
+	    chat.on('child_added', function(data) {
+	    	//console.log(data.val());
+	    	$('.chat').append('<p>'+data.val().username+'<span> =>	'+data.val().mensaje+'</span><p>')
+	    });
+
+	    //Aquí utilizaremos inicio de sesión de Facebook para autenticar a nuestro usuarios
+	    var provider = new firebase.auth.FacebookAuthProvider(); //Instancia del objeto
+	    $('#login').on('click', function(){
+	    	firebase.auth().signInWithRedirect(provider).then(function(result) {
+  // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+  var token = result.credential.accessToken;
+  // The signed-in user info.
+  var user = result.user;
+  console.log(user);
+  // ...
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+  // ...
+});
+	    });
+    </script>
+</body>
+</html>

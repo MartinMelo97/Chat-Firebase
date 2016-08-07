@@ -1,0 +1,17 @@
+.chat{
+	width:100%;
+	height: 300px;
+}
+
+.ingreso{
+	display: inline;
+}
+
+.control-login{
+	padding-top: 150px;
+	padding-left: 25px;
+}
+
+#login, #logout{
+	width: 100%;
+}

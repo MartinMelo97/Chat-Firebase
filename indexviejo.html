@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat</title>
+</head>
+<body>
+	<section class="chat">
+		<img id = "perfil">
+		<h1></h1>
+		<div class="caja">
+		</div>
+			<input type="text" id="mensaje">
+			<button id="enviar">Enviar</button>
+	</section>
+	<section class="login">
+		<button id="entrar">Entrar</button>
+	</section>
+	
+
+<script   src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
+
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCKIavU-uEpPKKI8HZj4mgRFPHaPfBhJvs",
+    authDomain: "fixterprueba-7b391.firebaseapp.com",
+    databaseURL: "https://fixterprueba-7b391.firebaseio.com",
+    storageBucket: "fixterprueba-7b391.appspot.com",
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+//Open the database
+	var database = firebase.database();
+	var chat = database.ref('chat');
+
+	$('#enviar').on('click', function(){
+		chat.push({
+			nombre: 'Aaron',
+			edad: 22,
+			mensaje: $('#mensaje').val() 
+		});
+	});
+
+	chat.on('child_added', function(data) {
+		$('.caja').append('<p>'+data.val().mensaje+'</p')
+	});
+
+	//Aqui loggueo al usuario
+	var provider = new firebase.auth.FacebookAuthProvider();
+
+	$('#entrar').on('click', function(){
+		firebase.auth().signInWithRedirect(provider).then(function(result) {
+  // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+  		var token = result.credential.accessToken;
+  // The signed-in user info.
+  		var user = result.user;
+  		console.log(user);
+  		$('h1').append(user.displayName);
+  		$('#perfil').attr('src', user.photoURL);
+  		
+  // ...
+}).catch(function(error) {
+  console.log(error);
+});
+
+});
+</script>    
+</body>
+</html>
